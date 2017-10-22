@@ -27,7 +27,7 @@ export const employeeSchema = Schema({
 });
 
 mongoose
-  .connect('mongodb://<yourDatabaseUrlHere>/veft-testing', {
+  .connect('mongodb://veft:123465@ds227035.mlab.com:27035/veft-testing', {
     useMongoClient: true,
   })
   .then(db => {

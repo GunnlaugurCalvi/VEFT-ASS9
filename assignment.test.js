@@ -1,5 +1,8 @@
 import {loop, add, throws} from './index';
 import * as Module from './index';
+import mockingoose from 'mockingoose';
+import employeeSchema from './index';
+
 describe('add', () => {
 	test('Should successfully add two integers together', () => {
 		expect(add(1,1)).toBe(2);
@@ -29,3 +32,21 @@ describe('loop', () => {
 			expect(mySpy).toHaveBeenCalledTimes(2);
 	});
 });
+
+describe('mockingoose', () => {
+	beforeEach(() => mockingoose.resetAll());
+
+/*	describe('mock tests', () => {
+		test('validate', () => {
+			const emp = new employeeSchema({
+				name: 'name',
+				jobTitles: ['namejob', 'jobname']
+			});
+			return emp.validate().then(() => { 
+				expect(emp.toObject()).toHaveProperty('_id');
+			});
+		});
+	});*/
+
+
+});	
