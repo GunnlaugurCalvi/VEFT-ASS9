@@ -1,7 +1,6 @@
-const {add, throws} = require("./index");
-//import * as th from './index';
-
-describe('add', () =>{
+import {loop, add, throws} from './index';
+import * as Module from './index';
+describe('add', () => {
 	test('Should successfully add two integers together', () => {
 		expect(add(1,1)).toBe(2);
 	});
@@ -12,16 +11,21 @@ describe('add', () =>{
 		expect(add()).toEqual(NaN);
 	});
 });
+
 describe('throws', () => {
 	test('Should not throw error', () => {
 		const callSum = () => {
 			throws(true);
 		};
 	expect(callSum).toThrowError('You need to mock me');
+	});	
+});
+
+describe('loop', () => {
+	test('Add should get called N times', () => {	
+			const mySpy = jest.spyOn(Module, 'add');		
+			add(2,3);
+			add(4,6);
+			expect(mySpy).toHaveBeenCalledTimes(2);
 	});
-/*	test('should test if it returns false', () => {
-		throws(true,() => {
-			expect(true).toThrowError('You need to mock me');
-		});	
-	});	*/
 });
