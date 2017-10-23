@@ -2,7 +2,7 @@
   "name": "veft-testing-assignment",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Arnar Þór Sveinsson <arnar.th92@gmail.com>",
+  "author": "Arnor and Gunnlaugur <arnor15@ru.is>and<gunnlaugur15@ru.is>",
   "license": "MIT",
   "scripts": {
     "start": "babel-watch index.js --presets env",
