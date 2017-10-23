@@ -21,17 +21,17 @@ export const loop = n => {
 /* DO NOT REFACTOR THIS CODE */
 
 /* SERVER CODE TO REFACTOR */
+const employeeSchema = Schema({
+    name: String,
+    jobTitles: {type: [String]},
+});
+
 export default db => {
 
-    const employeeSchema = Schema({
-        name: String,
-        jobTitles: {type: [String]},
-      });
-       
       const app = express();
       app.use(jsonParser.json());
-      const Employee = db.model('Employee', employeeSchema);
 
+      
       console.log('connected');
       
       app.get('/job', (req, res) => {
@@ -66,5 +66,6 @@ export default db => {
       });
       return app;      
 }
+export const Employee = mongoose.model('Employee', employeeSchema);
 
 /* SERVER CODE TO REFACTOR */
