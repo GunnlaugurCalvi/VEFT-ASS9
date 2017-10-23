@@ -36,6 +36,22 @@ afterEach(() => {
 	]);
 });
 
+const createEmployee = (human, cb) => {
+	let promises = [];
+	for(let i = 0; i < human; i++){
+		promises.push(
+			new Promise((resolve, reject) => {
+				request(server)
+				.post('/job')
+				.send({name: 'Billie Joe JimBob', jobTitles: [`laywer ${i}`]})
+				.then(res => {
+					 resolve();
+				});
+			})
+		);
+	}
+	Promise.all(promises).then(cb);
+};
 
 describe('add', () => {
 	test('Should successfully add two integers together', () => {
@@ -89,6 +105,16 @@ describe('server', () => {
 		request(server).get('/job').expect(200).then(res => {
 			expect(res.body).toEqual({data :[]});
 			done();
+		});
+	});
+
+	test('should create 5 employees as a lawyer when its created', (done) => {
+		createEmployee(5, () => {
+			request(server).get('/job').expect(200).then(res => {
+				// const filterIds = res.body(({name, jobTitles}) => ({name, jobTitles}));	
+				expect(res.body).toMatchSnapshot('should create 5 employees as a lawyer when its created');
+				done();
+			})
 		});
 	});
 

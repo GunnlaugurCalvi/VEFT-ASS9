@@ -40,16 +40,11 @@ export default db => {
      
       app.post('/job', (req, res) => {
         const {name, jobTitles} = req.body;
-        console.log('IM AM HERE MANE WTFFFF400');
         if(!name || !name.length){
-            res.status(400).json({error:"invalid input"});
-            console.log('IM AM HERE MANE WTFFFF401');
-            
+            res.status(400).json({error:"invalid input"});            
         }
         else if(!jobTitles){
             res.status(400).json({error:"invalid input"});
-            console.log('IM AM HERE MANE WTFFFF402');
-            
         }
         else{
             new Employee({name, jobTitles}).save((err, data) => {
@@ -57,7 +52,6 @@ export default db => {
                     res.status(500).json({error:"internal error!"});
                 }
                 else{
-                    console.log('IM AM HERE MANE WTFFFF200');
                     const {name, jobTitles} =  data;
                     res.json({name, jobTitles});
                 }

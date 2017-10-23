@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should create 5 employees as a lawyer when its created 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "__v": 0,
+      "_id": "59edcc39466eef069cc0001a",
+      "jobTitles": Array [
+        "laywer 0",
+      ],
+      "name": "Billie Joe JimBob",
+    },
+    Object {
+      "__v": 0,
+      "_id": "59edcc39466eef069cc0001b",
+      "jobTitles": Array [
+        "laywer 1",
+      ],
+      "name": "Billie Joe JimBob",
+    },
+    Object {
+      "__v": 0,
+      "_id": "59edcc39466eef069cc0001c",
+      "jobTitles": Array [
+        "laywer 2",
+      ],
+      "name": "Billie Joe JimBob",
+    },
+    Object {
+      "__v": 0,
+      "_id": "59edcc39466eef069cc0001d",
+      "jobTitles": Array [
+        "laywer 3",
+      ],
+      "name": "Billie Joe JimBob",
+    },
+    Object {
+      "__v": 0,
+      "_id": "59edcc39466eef069cc0001e",
+      "jobTitles": Array [
+        "laywer 4",
+      ],
+      "name": "Billie Joe JimBob",
+    },
+  ],
+}
+`;
