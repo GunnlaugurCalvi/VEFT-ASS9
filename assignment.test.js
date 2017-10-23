@@ -71,20 +71,26 @@ describe('loop', () => {
 
 describe('server', () => {
 
-	test('should return 200 when posting data', (done) => {
-		request(server).post('/job').send({name: 'gulli', jobTitles: ['hakks']})
-		.expect(200).then(res =>{
-			expect(res.body.id).toBeDefined();
-			expect(res.body.name).toBe('gulli');
-			// expect(res.body.jobTitles).toBe()
-			done();
-		});
-	});
 
-	test('should return empty for employee', (done) => {
+ 	test('should return empty for employee', (done) => {
 		request(server).get('/job').expect(200).then(res => {
 			expect(res.body).toEqual({data :[]});
 			done();
 		});
+	});
+
+	test('should return 200 when posting data', (done) => {
+		request(server).post('/job').send({name: 'gulli', jobTitles: ['hakks']})
+		.expect(200).then(res =>{
+			// expect(res.body._id).toBeDefined();
+			expect(res.body.name).toBe('gulli');
+			expect(res.body.jobTitles).toEqual(['hakks']);
+			done();
+		});
+	});
+
+	test('should return 400 when posting data is invalid', (done) => {
+		request(server).post('/job').send({name: 'gulli'})
+		.expect(400).then(res => done());
 	});
 });
