@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "4.16.2",
     "mockingoose": "^2.3.0",
     "mongoose": "4.12.3",

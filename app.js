@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose, {Schema} from 'mongoose';
+import jsonParser from 'body-parser';
 import errorFunction from './errorFunction';
 
 /* DO NOT REFACTOR THIS CODE */
@@ -26,13 +27,36 @@ export default db => {
         name: String,
         jobTitles: {type: [String]},
       });
-      const Employee = db.model('Employee', employeeSchema);      
+       
       const app = express();
-      console.log('connected');
-      app.get('/', (req, res) => {
-          Employee.find({}).exec((err, data) => res.json({data}));
-      });
+      const Employee = db.model('Employee', employeeSchema);
 
+      console.log('connected');
+      
+      app.get('/job', (req, res) => {
+          Employee.find({}).exec((err, data) => res.json({data}));
+      });      
+     
+      app.post('/job', (req, res) => {
+        const {name, jobTitles} = req.body;
+        if(!name || !name.length){
+            res.status(400).json({error:"invalid input"});
+        }
+        else if(!jobTitles || !name.jobTitles){
+            res.status(400).json({error:"invalid input"});
+        }
+        else{
+            new Employee({name, jobTitles}).save((err, data) => {
+                if(err){
+                    res.status(500).json({error:"internal error!"});
+                }
+                else{
+                    const {name, jobTitles} =  data;
+                    res.json({name, jobTitles});
+                }
+            })
+        }
+      });
       return app;      
 }
 

@@ -2,6 +2,7 @@ import mongo from 'mongodb-memory-server';
 import app from './app'
 import mongoose from 'mongoose';
 import {loop, add, throws} from './app';
+import {Employee} from './app';
 import * as Module from './app';
 import request from 'supertest';
 // import mockingoose from 'mockingoose';
@@ -25,6 +26,16 @@ beforeAll(() => {
 		});
 	});
 });
+
+// afterEach(() => {
+// 	return Promise.all([
+// 		new Promise((resolve, reject) => {		
+// 			Employee.deleteMany({}, (err, data) => {
+// 				resolve();
+// 			});
+// 		})
+// 	]);
+// });
 
 
 describe('add', () => {
@@ -57,9 +68,21 @@ describe('loop', () => {
 	});
 });
 
+
 describe('server', () => {
+
+	test('should return 200 when posting data', (done) => {
+		request(server).post('/job').send({name: 'gulli', jobTitles: ['hakks']})
+		.expect(200).then(res =>{
+			expect(res.body.id).toBeDefined();
+			expect(res.body.name).toBe('gulli');
+			// expect(res.body.jobTitles).toBe()
+			done();
+		});
+	});
+
 	test('should return empty for employee', (done) => {
-		request(server).get('/').expect(200).then(res => {
+		request(server).get('/job').expect(200).then(res => {
 			expect(res.body).toEqual({data :[]});
 			done();
 		});
