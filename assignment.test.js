@@ -1,7 +1,31 @@
-import {loop, add, throws} from './index';
-import * as Module from './index';
-import mockingoose from 'mockingoose';
-import employeeSchema from './index';
+import mongo from 'mongodb-memory-server';
+import app from './app'
+import mongoose from 'mongoose';
+import {loop, add, throws} from './app';
+import * as Module from './app';
+import request from 'supertest';
+// import mockingoose from 'mockingoose';
+
+mongoose.Promise = global.Promise;
+let mongoServer;
+let server;
+
+beforeAll(() => {
+	return new Promise((resolve, reject) => {
+		mongoServer = new mongo();
+		mongoServer.getConnectionString().then((mongoUri) => {
+			mongoose
+			.connect(mongoUri, {
+			  useMongoClient: true,
+			})
+			.then(db => {
+				server = app(db);
+				resolve();
+			});
+		});
+	});
+});
+
 
 describe('add', () => {
 	test('Should successfully add two integers together', () => {
@@ -33,20 +57,11 @@ describe('loop', () => {
 	});
 });
 
-describe('mockingoose', () => {
-	beforeEach(() => mockingoose.resetAll());
-
-/*	describe('mock tests', () => {
-		test('validate', () => {
-			const emp = new employeeSchema({
-				name: 'name',
-				jobTitles: ['namejob', 'jobname']
-			});
-			return emp.validate().then(() => { 
-				expect(emp.toObject()).toHaveProperty('_id');
-			});
+describe('server', () => {
+	test('should return empty for employee', (done) => {
+		request(server).get('/').expect(200).then(res => {
+			expect(res.body).toEqual({data :[]});
+			done();
 		});
-	});*/
-
-
-});	
+	});
+});
