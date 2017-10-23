@@ -1,8 +1,10 @@
 import mongo from 'mongodb-memory-server';
 import app from './app'
 import mongoose from 'mongoose';
-import {loop, add, throws, Employee} from './app';
-import * as Module from './app';
+import {loop, throws, Employee} from './app';
+import {add} from './add';
+import * as addModule from './add';
+import * as Module from './add';
 import request from 'supertest';
 
 mongoose.Promise = global.Promise;
@@ -74,7 +76,7 @@ describe('throws', () => {
 });
 
 describe('loop', () => {
-	test('Add should get called N times', () => {	
+	test('Extra test for add ', () => {	
 			const mySpy = jest.spyOn(Module, 'add');
 			for(let i = 0; i < 100; i++)
 			{
@@ -83,7 +85,25 @@ describe('loop', () => {
 			add(2,3);
 			add(4,6);
 			expect(mySpy).toHaveBeenCalledTimes(102);
+	
+			mySpy.mockRestore();
 	});
+	
+	
+
+	test('Loop and call add N times', () => {
+		let nr = 10;
+		let nr2 = 1337;
+		const loopSpy = jest.spyOn(addModule, 'add');
+		let sum = loop(nr);
+		expect(loopSpy).toHaveBeenCalledTimes(nr);
+		expect(sum).toBe(190);
+		
+		loopSpy.mockReset();
+		sum = loop(nr2);
+		expect(loopSpy).toHaveBeenCalledTimes(nr2);
+		expect(sum).toBeNaN()
+	})
 });
 
 describe('server', () => {
@@ -95,7 +115,7 @@ describe('server', () => {
 
 	test('should return 200 when posting data', (done) => {
 		request(server).post('/job').send({name: 'gulli', jobTitles: ['hakks']}).set("Authorization", "admin")
-		.expect(200).then(res =>{
+		.expect(200).then(res => {
 			expect(res.body.name).toBe('gulli');
 			expect(res.body.jobTitles).toEqual(['hakks']);
 			done();

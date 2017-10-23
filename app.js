@@ -2,10 +2,9 @@ import express from 'express';
 import mongoose, {Schema} from 'mongoose';
 import jsonParser from 'body-parser';
 import errorFunction from './errorFunction';
+import {add} from './add';
 
 /* DO NOT REFACTOR THIS CODE */
-export const add = (a, b) => a + b;
-
 export const throws = n => {
   errorFunction();
   return n;
