@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 import {loop, add, throws, Employee} from './app';
 import * as Module from './app';
 import request from 'supertest';
-// import mockingoose from 'mockingoose';
 
 mongoose.Promise = global.Promise;
 let mongoServer;
@@ -43,7 +42,7 @@ const createEmployee = (human, cb) => {
 			new Promise((resolve, reject) => {
 				request(server)
 				.post('/job')
-				.send({name: 'Billie Joe JimBob', jobTitles: [`laywer ${i}`]})
+				.send({name: 'Billie Joe JimBob', jobTitles: [`laywer ${i}`]}).set("Authorization", "admin")
 				.then(res => {
 					 resolve();
 				});
@@ -76,27 +75,36 @@ describe('throws', () => {
 
 describe('loop', () => {
 	test('Add should get called N times', () => {	
-			const mySpy = jest.spyOn(Module, 'add');		
+			const mySpy = jest.spyOn(Module, 'add');
+			for(let i = 0; i < 100; i++)
+			{
+				add(1,15);
+			}		
 			add(2,3);
 			add(4,6);
-			expect(mySpy).toHaveBeenCalledTimes(2);
+			expect(mySpy).toHaveBeenCalledTimes(102);
 	});
 });
-
 
 describe('server', () => {
 	
 	test('should return 400 when posting data is invalid', (done) => {
-		request(server).post('/job').send({name: 'gulli'})
+		request(server).post('/job').send({name: 'gulli'}).set("Authorization", "admin")
 		.expect(400).then(res => done());
 	});
 
 	test('should return 200 when posting data', (done) => {
-		request(server).post('/job').send({name: 'gulli', jobTitles: ['hakks']})
+		request(server).post('/job').send({name: 'gulli', jobTitles: ['hakks']}).set("Authorization", "admin")
 		.expect(200).then(res =>{
-			// expect(res.body._id).toBeDefined();
 			expect(res.body.name).toBe('gulli');
 			expect(res.body.jobTitles).toEqual(['hakks']);
+			done();
+		});
+	});
+
+	test('should return 401 when posting data is denied', (done) => {
+		request(server).post('/job').send({name: 'gulli', jobTitles: ['hakks']})
+		.expect(401).then(res =>{
 			done();
 		});
 	});
@@ -110,8 +118,7 @@ describe('server', () => {
 
 	test('should create 5 employees as a lawyer when its created', (done) => {
 		createEmployee(5, () => {
-			request(server).get('/job').expect(200).then(res => {
-				// const filterIds = res.body(({name, jobTitles}) => ({name, jobTitles}));	
+			request(server).get('/job').expect(200).then(res => {	
 				expect(res.body).toMatchSnapshot('should create 5 employees as a lawyer when its created');
 				done();
 			})

@@ -21,6 +21,7 @@ export const loop = n => {
 /* DO NOT REFACTOR THIS CODE */
 
 /* SERVER CODE TO REFACTOR */
+
 const employeeSchema = Schema({
     name: String,
     jobTitles: {type: [String]},
@@ -28,6 +29,7 @@ const employeeSchema = Schema({
 
 export default db => {
 
+      const adminToken = "admin";
       const app = express();
       app.use(jsonParser.json());
 
@@ -39,8 +41,13 @@ export default db => {
       });      
      
       app.post('/job', (req, res) => {
+
         const {name, jobTitles} = req.body;
-        if(!name || !name.length){
+
+        if(req.headers.authorization !== adminToken){
+            res.status(401).json({error:"Auth denied!"})
+        }
+        else if(!name || !name.length){
             res.status(400).json({error:"invalid input"});            
         }
         else if(!jobTitles){
